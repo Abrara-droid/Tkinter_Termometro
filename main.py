@@ -5,6 +5,8 @@ class mainApp(Tk):
     entrada = None
     tipoUnidad = None
     
+    __temperaturaAnt = ""
+    
     def __init__(self):
         Tk.__init__(self)
         self.title("Termómetro")
@@ -13,6 +15,7 @@ class mainApp(Tk):
         self.resizable(0,0) #Esto no deja redimensionar la ventana
         
         self.temperatura = StringVar(value="") # VV de control
+        self.temperatura.trace("w", self.validateTemperature) #"trace, w" cada vez que escribimos o borramos en el recuadro llama a la funcion validateTemperature
         self.tipoUnidad = StringVar(value= "C")
         
         self.createLayout()
@@ -27,7 +30,15 @@ class mainApp(Tk):
     def start(self):
         self.mainloop()
         
-
+    def validateTemperature(self, *args): #*args: espera una tupla o lista sin numero fijo de vv
+        nuevoValor = self.temperatura.get()
+        print("nuevoValor: ", nuevoValor)
+        try:
+            float(nuevoValor)
+            self.__temperaturaAnt = nuevoValor
+        except:
+            self.temperatura.set(self.__temperaturaAnt)
+            print("Valor anterior: ", self.__temperaturaAnt)
 if __name__ == '__main__':
     app = mainApp()
     app.start()
